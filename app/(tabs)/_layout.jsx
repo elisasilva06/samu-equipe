@@ -1,42 +1,26 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 
-export default function TabsLayout() {
+export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: true,
-        headerTitle: "SAMU",
+        headerShown: false, // vamos usar nosso CustomHeader em cada aba
         tabBarActiveTintColor: "#E63946",
+        tabBarInactiveTintColor: "#6B7280",
+        tabBarStyle: { height: 65, paddingBottom: 8, paddingTop: 6 },
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="perfil"
         options={{
-          title: "Início",
+          title: "Perfil",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home" size={size} color={color} />
+            <Ionicons name="person-circle" size={size} color={color} />
           ),
         }}
       />
-      <Tabs.Screen
-        name="ocorrencias"
-        options={{
-          title: "Chamado",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="medical" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="mensagens"
-        options={{
-          title: "Chat",
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="chatbubble-ellipses" size={size} color={color} />
-          ),
-        }}
-      />
+
       <Tabs.Screen
         name="tarefas"
         options={{
@@ -46,6 +30,7 @@ export default function TabsLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name="historico"
         options={{
@@ -55,12 +40,13 @@ export default function TabsLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
-        name="perfil"
+        name="mensagens"
         options={{
-          title: "Perfil",
+          title: "Mensagens",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person" size={size} color={color} />
+            <Ionicons name="chatbubble-ellipses" size={size} color={color} />
           ),
         }}
       />
