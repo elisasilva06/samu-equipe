@@ -1,59 +1,113 @@
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Home() {
   const router = useRouter();
 
-  // Dados de exemplo
   const unidade = "Unidade Centro";
-  const status = "Ativo"; // Pode ser "Folga" ou "Em Atendimento"
+  const status = "Ativo";
 
-  // Cor do status
-  const statusColor = status === "Ativo" ? "#2A9D8F" : status === "Folga" ? "#F8F9FA" : "#FFB703";
+  const statusColor =
+    status === "Ativo"
+      ? "#2A9D8F"
+      : status === "Folga"
+      ? "#9CA3AF"
+      : "#F4A261";
 
   return (
     <View style={styles.container}>
 
       {/* HEADER */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>SAMU CAXIAS</Text>
-        <Text style={styles.headerSubtitle}>Painel da Equipe</Text>
+      <LinearGradient colors={["#0A2540", "#133C67"]} style={styles.headerBg}>
+        <Ionicons
+          name="medkit"
+          size={160}
+          color="rgba(255,255,255,0.05)"
+          style={styles.bgIcon}
+        />
+
+        <View style={styles.headerContent}>
+          <View>
+            <Text style={styles.welcome}>Plantão atual</Text>
+            <Text style={styles.unit}>{unidade}</Text>
+          </View>
+
+          <View style={[styles.statusBadge, { backgroundColor: statusColor }]}>
+            <Text style={styles.statusText}>{status}</Text>
+          </View>
+        </View>
+      </LinearGradient>
+
+      {/* CARD PRINCIPAL */}
+      <View style={styles.mainCard}>
+        <Ionicons name="pulse" size={42} color="#E63946" />
+        <Text style={styles.mainTitle}>Nenhuma ocorrência ativa</Text>
+        <Text style={styles.mainSubtitle}>
+          Você está disponível para atendimento
+        </Text>
       </View>
 
-      {/* INFORMAÇÕES DO PROFISSIONAL */}
-      <View style={styles.infoContainer}>
-        <View style={styles.infoBox}>
-          <Ionicons name="location" size={20} color="#003049" />
-          <Text style={styles.infoText}>{unidade}</Text>
+      {/* AÇÕES */}
+      <View style={styles.grid}>
+
+        <TouchableOpacity style={styles.primaryCard} onPress={() => router.push("/ocorrencias")}>
+          <Ionicons name="medkit" size={38} color="#FFFFFF" />
+          <Text style={styles.primaryText}>Ocorrências</Text>
+        </TouchableOpacity>
+
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.secondaryCard} onPress={() => router.push("/historico")}>
+            <Ionicons name="time" size={28} color="#003049" />
+            <Text style={styles.secondaryText}>Histórico</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.secondaryCard} onPress={() => router.push("/tarefas")}>
+            <Ionicons name="alert-circle" size={28} color="#003049" />
+            <Text style={styles.secondaryText}>Tarefas</Text>
+          </TouchableOpacity>
         </View>
-        <View style={[styles.infoBox, { backgroundColor: statusColor }]}>
-          <Ionicons name="person" size={20} color={status === "Folga" ? "#6B7280" : "#FFFFFF"} />
-          <Text style={[styles.infoText, status === "Folga" && { color: "#6B7280" }]}>{status}</Text>
+
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.secondaryCard} onPress={() => router.push("/mensagens")}>
+            <Ionicons name="chatbubbles" size={28} color="#003049" />
+            <Text style={styles.secondaryText}>Mensagens</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.secondaryCard} onPress={() => router.push("/perfil")}>
+            <Ionicons name="person-circle" size={28} color="#003049" />
+            <Text style={styles.secondaryText}>Perfil</Text>
+          </TouchableOpacity>
         </View>
+
       </View>
 
-      {/* CARDS */}
-      <View style={styles.cardsArea}>
-        <TouchableOpacity style={styles.card} onPress={() => router.push("/ocorrencias")}>
-          <Ionicons name="medkit" size={34} color="#2A9D8F" />
-          <Text style={styles.cardTitle}>Ocorrências</Text>
-        </TouchableOpacity>
+      {/* PAINEL DO PLANTÃO */}
+      <View style={styles.shiftPanel}>
+        <Text style={styles.shiftTitle}>Situação do plantão</Text>
 
-        <TouchableOpacity style={styles.card} onPress={() => router.push("/perfil")}>
-          <Ionicons name="person-circle" size={34} color="#2A9D8F" />
-          <Text style={styles.cardTitle}>Perfil</Text>
-        </TouchableOpacity>
+        <View style={styles.statsRow}>
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>2</Text>
+            <Text style={styles.statLabel}>Aguardando</Text>
+          </View>
 
-        <TouchableOpacity style={styles.card} onPress={() => router.push("/historico")}>
-          <Ionicons name="time" size={34} color="#2A9D8F" />
-          <Text style={styles.cardTitle}>Histórico</Text>
-        </TouchableOpacity>
+          <View style={styles.statBox}>
+            <Text style={[styles.statNumber, { color: "#E63946" }]}>1</Text>
+            <Text style={styles.statLabel}>Em atendimento</Text>
+          </View>
 
-        <TouchableOpacity style={[styles.card, styles.alertCard]} onPress={() => router.push("/tarefas")}>
-          <Ionicons name="alert-circle" size={34} color="#FFB703" />
-          <Text style={[styles.cardTitle, { color: "#FFB703" }]}>Tarefas</Text>
-        </TouchableOpacity>
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>8m</Text>
+            <Text style={styles.statLabel}>Última</Text>
+          </View>
+
+          <View style={styles.statBox}>
+            <Text style={styles.statNumber}>5</Text>
+            <Text style={styles.statLabel}>Equipe</Text>
+          </View>
+        </View>
       </View>
 
     </View>
@@ -61,89 +115,78 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#F8F9FA",
+  container: { flex: 1, backgroundColor: "#F1F5F9" },
+
+  headerBg: {
+    paddingTop: 70,
+    paddingBottom: 35,
+    paddingHorizontal: 20,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
+    overflow: "hidden",
   },
 
-  header: {
-    backgroundColor: "#003049",
-    paddingTop: 70,
-    paddingBottom: 25,
-    paddingHorizontal: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+  headerContent: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  bgIcon: { position: "absolute", right: -20, top: -20 },
+
+  welcome: { fontSize: 13, color: "rgba(255,255,255,0.7)" },
+  unit: { fontSize: 20, fontWeight: "bold", color: "#FFFFFF" },
+
+  statusBadge: { paddingHorizontal: 14, paddingVertical: 6, borderRadius: 20 },
+  statusText: { color: "#FFFFFF", fontWeight: "bold" },
+
+  mainCard: {
+    marginHorizontal: 20,
+    marginTop: -25,
+    padding: 28,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 24,
+    alignItems: "center",
     elevation: 8,
   },
 
-  headerTitle: {
-    color: "#FFFFFF",
-    fontSize: 26,
-    fontWeight: "bold",
-  },
+  mainTitle: { marginTop: 12, fontSize: 19, fontWeight: "bold", color: "#003049" },
+  mainSubtitle: { marginTop: 4, color: "#6B7280", fontSize: 14 },
 
-  headerSubtitle: {
-    color: "#E0E7FF",
-    fontSize: 16,
-    marginTop: 4,
-  },
+  grid: { marginTop: 18, paddingHorizontal: 20 },
 
-  infoContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-    marginTop: 20,
-  },
+  row: { flexDirection: "row", justifyContent: "space-between", marginTop: 14 },
 
-  infoBox: {
-    flexDirection: "row",
+  primaryCard: {
+    width: "100%",
+    backgroundColor: "#E63946",
+    borderRadius: 22,
+    padding: 26,
     alignItems: "center",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 12,
-    backgroundColor: "#FFFFFF",
-    elevation: 3,
+    elevation: 6,
   },
 
-  infoText: {
-    marginLeft: 6,
-    fontWeight: "bold",
-    fontSize: 14,
-    color: "#003049",
-  },
+  primaryText: { color: "#FFFFFF", fontSize: 18, fontWeight: "bold", marginTop: 10 },
 
-  cardsArea: {
-    padding: 18,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginTop: 20,
-  },
-
-  card: {
+  secondaryCard: {
     width: "48%",
     backgroundColor: "#FFFFFF",
     borderRadius: 18,
-    paddingVertical: 28,
-    paddingHorizontal: 18,
-    marginBottom: 18,
+    padding: 22,
     alignItems: "center",
-    elevation: 6,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 8,
+    elevation: 4,
   },
 
-  alertCard: {
-    borderWidth: 2,
-    borderColor: "#FFB703",
+  secondaryText: { marginTop: 8, fontWeight: "bold", color: "#003049" },
+
+  shiftPanel: {
+    marginTop: 18,
+    marginHorizontal: 20,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 22,
+    padding: 18,
+    elevation: 4,
   },
 
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#2A9D8F",
-    marginTop: 14,
-  },
+  shiftTitle: { fontSize: 15, fontWeight: "bold", color: "#003049", marginBottom: 12 },
+  statsRow: { flexDirection: "row", justifyContent: "space-between" },
+
+  statBox: { alignItems: "center", flex: 1 },
+  statNumber: { fontSize: 18, fontWeight: "bold", color: "#003049" },
+  statLabel: { fontSize: 12, color: "#6B7280", marginTop: 2 },
 });
